@@ -60,7 +60,7 @@ func GetDocumentByCode(shortcode string) Document {
 
 func GetDocumentByPrivateCode(private string) Document {
 	var result Document
-	err := documents.FindOne(ctx, bson.D{primitive.E{Key: "short_priv", Value: private}}).Decode(&result)
+	err := documents.FindOne(ctx, bson.D{primitive.E{Key: "short_private", Value: private}}).Decode(&result)
 	if err == nil {
 		return result
 	}
