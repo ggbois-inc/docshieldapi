@@ -60,6 +60,15 @@ func GetDocuments(meta_id string) []Document {
 	return docs
 }
 
+func GetDocumentByCID(cid string) Document {
+	var result Document
+	err := documents.FindOne(ctx, bson.D{primitive.E{Key: "cid", Value: cid}}).Decode(&result)
+	if err == nil {
+		return result
+	}
+	return Document{}
+}
+
 func GetDocumentByCode(shortcode string) Document {
 	var result Document
 	err := documents.FindOne(ctx, bson.D{primitive.E{Key: "short", Value: shortcode}}).Decode(&result)
@@ -70,7 +79,7 @@ func GetDocumentByCode(shortcode string) Document {
 }
 
 func CreateDocument(meta_id string, filename string, cid string, shortcode string) Document {
-	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, Permissions: []Permission{}}
+	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, CreatedOn: time.Now(), Permissions: []Permission{}}
 	_, err := documents.InsertOne(ctx, doc)
 	if err != nil {
 		log.Fatal(err)
