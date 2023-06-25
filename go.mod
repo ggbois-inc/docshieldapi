@@ -2,11 +2,13 @@ module github.com/ggbois-inc/docshieldapi
 
 go 1.20
 
-require github.com/ipfs/go-ipfs-api v0.6.0
+require (
+	github.com/ipfs/go-ipfs-api v0.6.0
+	github.com/julienschmidt/httprouter v1.3.0
+)
 
 require (
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/julienschmidt/httprouter v1.3.0 // indirect
 	github.com/klauspost/compress v1.15.12 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
@@ -39,6 +41,7 @@ require (
 	github.com/multiformats/go-multihash v0.2.1 // indirect
 	github.com/multiformats/go-multistream v0.4.1 // indirect
 	github.com/multiformats/go-varint v0.0.7 // indirect
+	github.com/rs/cors v1.9.0
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/whyrusleeping/tar-utils v0.0.0-20180509141711-8c6c8ba81d5c // indirect
 	go.mongodb.org/mongo-driver v1.12.0
