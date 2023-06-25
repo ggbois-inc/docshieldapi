@@ -67,8 +67,8 @@ func GetDocumentByPrivateCode(private string) Document {
 	return Document{}
 }
 
-func CreateDocument(meta_id string, filename string, cid string, shortcode string, shortcode_priv string) Document {
-	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, PrivateShortCode: shortcode_priv, CreatedOn: time.Now(), Permissions: []Permission{}}
+func CreateDocument(meta_id string, filename string, cid string, shortcode string, shortcode_priv string, size string) Document {
+	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, PrivateShortCode: shortcode_priv, Filesize: size, CreatedOn: time.Now(), Permissions: []Permission{}}
 	_, err := documents.InsertOne(ctx, doc)
 	if err != nil {
 		log.Fatal(err)

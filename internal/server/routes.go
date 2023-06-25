@@ -25,7 +25,7 @@ func fileUpload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	actions.UploadDocument(r.Header.Get("meta_id"), file, fileHeader.Filename)
+	actions.UploadDocument(r.Header.Get("meta_id"), file, fileHeader.Filename, uint64(fileHeader.Size))
 	fmt.Fprint(w, "DONE\n")
 }
 

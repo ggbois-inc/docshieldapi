@@ -4,15 +4,16 @@ import (
 	"io"
 	"log"
 
+	"github.com/dustin/go-humanize"
 	"github.com/ggbois-inc/docshieldapi/internal/database"
 	"github.com/ggbois-inc/docshieldapi/internal/ipfs"
 )
 
-func UploadDocument(meta_id string, file io.Reader, filename string) {
+func UploadDocument(meta_id string, file io.Reader, filename string, size uint64) {
 	log.Printf("Running Upload action for %s", meta_id)
 	database.CreateUser(meta_id)
 	cid := ipfs.UploadFile(file)
-	database.CreateDocument(meta_id, filename, cid, generateRandomString(10), generateRandomString(10))
+	database.CreateDocument(meta_id, filename, cid, generateRandomString(10), generateRandomString(10), humanize.Bytes(size))
 }
 
 func GetDocuments(meta_id string) []database.Document {

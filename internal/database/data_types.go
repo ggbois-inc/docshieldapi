@@ -19,6 +19,7 @@ type User struct {
 type Document struct {
 	ID               primitive.ObjectID `bson:"_id" json:"_id"`
 	Filename         string             `bson:"filename" json:"filename"`
+	Filesize         string             `bson:"file_size" json:"file_size"`
 	CID              string             `bson:"cid" json:"cid"`
 	ShortCode        string             `bson:"short" json:"short"`
 	PrivateShortCode string             `bson:"short_private" json:"short_private"`
