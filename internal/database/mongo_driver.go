@@ -22,6 +22,11 @@ type Permission struct {
 	Perm       int    `bson:"permission" json:"permission"`
 }
 
+type User struct {
+	ID         primitive.ObjectID `bson:"_id" json:"_id"`
+	MetaMaskID string             `bson:"meta_id" json:"meta_id"`
+}
+
 type Document struct {
 	ID          primitive.ObjectID `bson:"_id" json:"_id"`
 	Filename    string             `bson:"filename" json:"filename"`
@@ -45,6 +50,16 @@ func init() {
 	documents = client.Database("blockdb").Collection("documents")
 }
 
+func GetDocuments(meta_id string) []Document {
+	cur, err := documents.Find(ctx, bson.D{primitive.E{Key: "meta_id", Value: meta_id}})
+	var docs []Document
+	if err = cur.All(context.TODO(), &docs); err != nil {
+		panic(err)
+	}
+	log.Printf("Document searched for %s", meta_id)
+	return docs
+}
+
 func GetDocumentByCode(shortcode string) Document {
 	var result Document
 	err := documents.FindOne(ctx, bson.D{primitive.E{Key: "short", Value: shortcode}}).Decode(&result)
@@ -52,4 +67,30 @@ func GetDocumentByCode(shortcode string) Document {
 		return result
 	}
 	return Document{}
+}
+
+func CreateDocument(meta_id string, filename string, cid string, shortcode string) Document {
+	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, Permissions: []Permission{}}
+	_, err := documents.InsertOne(ctx, doc)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Document created for %s", meta_id)
+	return doc
+}
+
+func CreateUser(meta_id string) User {
+	user := User{ID: primitive.NewObjectID(), MetaMaskID: meta_id}
+	var result User
+	err := users.FindOne(ctx, bson.D{primitive.E{Key: "meta_id", Value: meta_id}}).Decode(&result)
+	if err == nil {
+		log.Printf("User %s exists", meta_id)
+		return result
+	}
+	_, err = users.InsertOne(ctx, user)
+	log.Printf("User %s created", meta_id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return user
 }
