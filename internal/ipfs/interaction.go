@@ -24,10 +24,7 @@ func UploadFile(reader io.Reader) string {
 }
 
 func GetFile(cid string) []byte {
-	i, err := sh.Cat(cid)
-	if err != nil {
-		log.Fatal(err)
-	}
+	i, _ := sh.Cat(cid)
 	resp, _ := io.ReadAll(i)
 	return resp
 }

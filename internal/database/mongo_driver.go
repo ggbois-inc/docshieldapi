@@ -58,14 +58,32 @@ func GetDocumentByCode(shortcode string) Document {
 	return Document{}
 }
 
-func CreateDocument(meta_id string, filename string, cid string, shortcode string) Document {
-	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, CreatedOn: time.Now(), Permissions: []Permission{}}
+func GetDocumentByPrivateCode(private string) Document {
+	var result Document
+	err := documents.FindOne(ctx, bson.D{primitive.E{Key: "short_priv", Value: private}}).Decode(&result)
+	if err == nil {
+		return result
+	}
+	return Document{}
+}
+
+func CreateDocument(meta_id string, filename string, cid string, shortcode string, shortcode_priv string) Document {
+	doc := Document{ID: primitive.NewObjectID(), CreatedBy: meta_id, CID: cid, Filename: filename, ShortCode: shortcode, PrivateShortCode: shortcode_priv, CreatedOn: time.Now(), Permissions: []Permission{}}
 	_, err := documents.InsertOne(ctx, doc)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("Document created for %s", meta_id)
 	return doc
+}
+
+func DeleteDocument(meta_id string, cid string) int {
+	info, err := documents.DeleteOne(ctx, bson.M{"meta_id": meta_id, "cid": cid})
+	if err != nil {
+		log.Println(err)
+	}
+	log.Printf("Deleted %d documents", info.DeletedCount)
+	return int(info.DeletedCount)
 }
 
 func CreateUser(meta_id string) User {

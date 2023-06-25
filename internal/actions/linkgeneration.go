@@ -23,3 +23,9 @@ func GetDocumentByLink(shortcode string) ([]byte, database.Document) {
 	file := ipfs.GetFile(doc.CID)
 	return file, doc
 }
+
+func GetDocumentByPrivateLink(private string) ([]byte, database.Document) {
+	doc := database.GetDocumentByPrivateCode(private)
+	file := ipfs.GetFile(doc.CID)
+	return file, doc
+}
