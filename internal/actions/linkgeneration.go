@@ -18,8 +18,8 @@ func generateRandomString(length int) string {
 	return base64.URLEncoding.EncodeToString(bytes)[:length]
 }
 
-func GetDocumentByLink(shortcode string) []byte {
+func GetDocumentByLink(shortcode string) ([]byte, database.Document) {
 	doc := database.GetDocumentByCode(shortcode)
 	file := ipfs.GetFile(doc.CID)
-	return file
+	return file, doc
 }

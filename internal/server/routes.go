@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -35,8 +36,16 @@ func getFiles(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	json.NewEncoder(w).Encode(docs)
 }
 
+func getFileByCode(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	data, doc := actions.GetDocumentByLink(p.ByName("code"))
+	w.Header().Set("Content-Type", "application/octet-stream")
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", doc.Filename))
+	http.ServeContent(w, r, doc.Filename, doc.CreatedOn, bytes.NewReader(data))
+}
+
 func createRoutes(router *httprouter.Router) {
 	router.GET("/", homePage)
 	router.POST("/api/upload", fileUpload)
 	router.GET("/api/files", getFiles)
+	router.GET("/api/file/:code", getFileByCode)
 }
