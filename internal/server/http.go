@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -16,6 +17,7 @@ func CreateHttpServer() *http.Server {
 	router := httprouter.New()
 	createRoutes(router)
 	handler := cors.AllowAll().Handler(router)
+	log.Printf("Starting server on %s", os.Getenv("HOST"))
 	return &http.Server{
 		Addr:    os.Getenv("HOST"),
 		Handler: handler,
