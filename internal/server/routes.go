@@ -31,7 +31,6 @@ func fileUpload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func fileDelete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	count := actions.DeleteDoc(r.Header.Get("meta_id"), r.Header.Get("cid"))
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "%d", count)
 }
