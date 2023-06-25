@@ -22,3 +22,12 @@ func UploadFile(reader io.Reader) string {
 	log.Println("File Uploaded")
 	return r
 }
+
+func GetFile(cid string) []byte {
+	i, err := sh.Cat(cid)
+	if err != nil {
+		log.Fatal(err)
+	}
+	resp, _ := io.ReadAll(i)
+	return resp
+}
